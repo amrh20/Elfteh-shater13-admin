@@ -1,0 +1,21 @@
+// Order Details Component Styles
+.order-details {
+  // Add any custom styles here if needed
+}
+
+// Print styles
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+} 
+.bg-blue-600  {
+  background-color: #007bff !important;
+}
+.bg-purple-600 {
+  background-color: #6f42c1 !important;
+}

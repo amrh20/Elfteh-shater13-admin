@@ -1,0 +1,263 @@
+// Enhanced Coupons List Styles
+
+// Main container
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+// Full width table
+.coupons-table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  
+  table {
+    width: 100%;
+    min-width: 800px; // Ensure table doesn't get too cramped
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    text-align: right;
+    vertical-align: middle;
+  }
+  
+  // Action buttons column
+  .actions-column {
+    width: 200px;
+    min-width: 200px;
+  }
+}
+
+// Enhanced button styles
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  @media (min-width: 640px) {
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 0.625rem 1.25rem;
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+  
+  svg {
+    flex-shrink: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    
+    @media (min-width: 1024px) {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+  
+  span {
+    white-space: nowrap;
+  }
+}
+
+// Edit button specific styles
+.edit-btn {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  
+  &:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+}
+
+// Delete button specific styles
+.delete-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  
+  &:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+  }
+}
+
+// Add coupon button
+.add-category-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  
+  @media (min-width: 1024px) {
+    width: auto;
+    padding: 0.875rem 2rem;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  svg {
+    flex-shrink: 0;
+  }
+  
+  span {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+}
+
+// Loading spinner
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+// Status badges
+.status-badge {
+  transition: all 0.2s ease;
+  
+  &.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+  }
+  
+  &.inactive {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: white;
+  }
+}
+
+// Progress bar for usage
+.usage-progress {
+  height: 0.25rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    transition: width 0.3s ease;
+  }
+}
+
+// Empty state
+.empty-state {
+  svg {
+    animation: pulse 2s infinite;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .coupons-table-container {
+    table {
+      min-width: 600px;
+    }
+    
+    th, td {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    
+    .actions-column {
+      width: 120px;
+      min-width: 120px;
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// Hover effects for table rows
+tbody tr {
+  transition: background-color 0.15s ease;
+  
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
+// Modal backdrop
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,86 @@
+<!-- Mobile backdrop -->
+<div *ngIf="!isCollapsed" 
+     class="mobile-backdrop"
+     [class.show]="!isCollapsed && isMobile"
+     (click)="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<div class="sidebar-container"
+     [class.collapsed]="isCollapsed"
+     [class.mobile]="isMobile"
+     [class.show]="!isCollapsed || !isMobile">
+  
+  <!-- Logo -->
+  <div class="logo-section">
+    <div class="logo-container">
+      <div class="logo-content" *ngIf="!isCollapsed">
+        <div class="logo-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+        </div>
+        <span class="logo-text">الفتح</span>
+      </div>
+      <div class="logo-icon-only" *ngIf="isCollapsed">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+        </svg>
+      </div>
+      <button
+        (click)="toggleSidebar()"
+        class="toggle-button mobile-only"
+      >
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      <button
+        (click)="toggleSidebar()"
+        class="toggle-button desktop-only"
+      >
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="nav-menu">
+    <ng-container *ngFor="let item of menuItems">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="nav-item"
+        [class.collapsed]="isCollapsed"
+        [title]="isCollapsed ? item.title : ''"
+        (click)="onMenuItemClick()"
+      >
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getIconPath(item.icon)"></path>
+        </svg>
+        <span class="nav-text" *ngIf="!isCollapsed">{{ item.title }}</span>
+      </a>
+    </ng-container>
+  </nav>
+
+  <!-- User Profile -->
+  <div class="user-profile">
+    <div class="user-info" *ngIf="!isCollapsed">
+      <div class="user-avatar">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+      </div>
+      <div class="user-details">
+        <p class="user-name">المدير</p>
+        <p class="user-email">adminexample.com</p>
+      </div>
+    </div>
+    <div class="user-avatar-only" *ngIf="isCollapsed">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+    </div>
+  </div>
+</div>

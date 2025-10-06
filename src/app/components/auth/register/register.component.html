@@ -1,0 +1,51 @@
+<div class="register-page" dir="rtl">
+  <div class="decor"></div>
+  <div class="auth-card">
+    <div class="brand">
+      <div class="logo">E</div>
+      <div class="titles">
+        <h1>إنشاء حساب مدير</h1>
+        <p>استخدم هذه الصفحة لإنشاء أول حساب مدير فقط</p>
+      </div>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="form">
+      <div class="field">
+        <label>اسم المستخدم</label>
+        <div class="control">
+          <!-- <span class="icon">@</span> -->
+          <input [(ngModel)]="username" name="username" type="text" placeholder="username" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>البريد الإلكتروني</label>
+        <div class="control">
+          <span class="icon">✉</span>
+          <input [(ngModel)]="email" name="email" type="email" placeholder="email@example.com" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>كلمة المرور</label>
+        <div class="control">
+          <span class="icon">*</span>
+          <input [(ngModel)]="password" name="password" type="password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert success">{{ successMessage }}</div>
+
+      <button [disabled]="isLoading" class="submit">
+        {{ isLoading ? 'جارٍ الإنشاء…' : 'إنشاء الحساب' }}
+      </button>
+    </form>
+
+    <div class="footer-link">
+      <a routerLink="/login">العودة لتسجيل الدخول</a>
+    </div>
+  </div>
+</div>
+
+

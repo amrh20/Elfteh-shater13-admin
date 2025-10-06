@@ -1,0 +1,72 @@
+<div *ngIf="hasPagination" class="flex flex-col sm:flex-row items-center justify-between gap-4">
+  <!-- Pagination Info -->
+  <div *ngIf="showInfo" class="text-sm text-gray-700 text-center sm:text-right">
+    عرض {{ startItem }} إلى {{ endItem }} من {{ totalItems }} {{ infoText }}
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="flex items-center gap-2">
+    <!-- First Page Button -->
+    <button
+      (click)="onFirstPage()"
+      [disabled]="!canGoToFirst()"
+      class="px-3 py-2 text-sm font-medium pagination-nav pagination-button rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      title="الصفحة الأولى"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <!-- Previous Button -->
+    <button
+      (click)="onPreviousPage()"
+      [disabled]="!canGoToPrevious()"
+      class="px-3 py-2 text-sm font-medium pagination-nav pagination-button rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      title="الصفحة السابقة"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <!-- Page Numbers -->
+    <div class="flex items-center gap-1 overflow-x-auto max-w-xs sm:max-w-none">
+      <button
+        *ngFor="let page of pageNumbers"
+        (click)="onPageChange(page)"
+        [class]="page === currentPage 
+          ? 'pagination-active pagination-button touch-target' 
+          : 'pagination-inactive pagination-button touch-target'"
+        [title]="'الصفحة ' + page"
+        class="flex-shrink-0"
+      >
+        {{ page }}
+      </button>
+    </div>
+
+    <!-- Next Button -->
+    <button
+      (click)="onNextPage()"
+      [disabled]="!canGoToNext()"
+      class="px-3 py-2 text-sm font-medium pagination-nav pagination-button rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      title="الصفحة التالية"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+
+    <!-- Last Page Button -->
+    <button
+      (click)="onLastPage()"
+      [disabled]="!canGoToLast()"
+      class="px-3 py-2 text-sm font-medium pagination-nav pagination-button rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      title="الصفحة الأخيرة"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </div>
+</div>

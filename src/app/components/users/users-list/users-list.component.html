@@ -1,0 +1,103 @@
+<div class="p-6">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">المستخدمين</h1>
+      <p class="text-sm text-gray-600">إدارة مستخدمي النظام</p>
+    </div>
+  </div>
+
+  <div class="users-wrapper w-full max-w-none mx-auto ">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-gray-900">قائمة المستخدمين</h3>
+        <button 
+          (click)="loadUsers()" 
+          [disabled]="isLoading"
+          class="refresh-btn px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm"
+        >
+          <span *ngIf="isLoading" class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
+          {{ isLoading ? 'جاري التحميل...' : 'تحديث' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading && users.length === 0" class="p-12 text-center">
+      <div class="animate-spin mx-auto w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mb-4"></div>
+      <p class="text-gray-600">جاري تحميل المستخدمين من الـ API...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && users.length === 0" class="p-12 text-center">
+      <div class="text-red-500 mb-4">
+        <svg class="mx-auto w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <p class="text-gray-600 mb-4">{{ error }}</p>
+      <button 
+        (click)="loadUsers()" 
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      >
+        إعادة المحاولة
+      </button>
+    </div>
+
+    <!-- Success State with Data -->
+    <div *ngIf="!isLoading && users.length > 0" class="overflow-x-auto">
+    
+
+      <table class="users-table w-full table-auto divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الاسم</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">البريد الإلكتروني</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الدور</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحالة</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاريخ الإنشاء</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let user of users; let i = index" class="table-row hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              {{ user.name || user.firstName + ' ' + user.lastName || user.username || 'غير محدد' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.email || 'غير محدد' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="status-badge" 
+                    [ngClass]="{
+                      'role-admin': user.role === 'admin',
+                      'role-manager': user.role === 'manager', 
+                      'role-user': user.role !== 'admin' && user.role !== 'manager'
+                    }">
+                {{ user.role === 'admin' ? 'مدير' : user.role === 'manager' ? 'مدير مبيعات' : 'مستخدم' }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="status-badge"
+                    [ngClass]="{
+                      'status-active': user.isActive,
+                      'status-inactive': !user.isActive
+                    }">
+                {{ user.isActive ? 'نشط' : 'غير نشط' }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.createdAt | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && users.length === 0 && !error" class="p-12 text-center">
+      <div class="text-gray-400 mb-4">
+        <svg class="mx-auto w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+        </svg>
+      </div>
+      <p class="text-gray-600">لا يوجد مستخدمين</p>
+    </div>
+  </div>
+  </div>
+</div>

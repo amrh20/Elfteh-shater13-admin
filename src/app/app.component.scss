@@ -1,0 +1,146 @@
+/* Main Layout Custom CSS */
+
+.app-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* Login Page */
+.login-container {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Dashboard Layout */
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  flex-direction: row; /* Sidebar on left, content on right */
+}
+
+/* Sidebar Container */
+.sidebar-container {
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0; /* Prevents flex item from overflowing */
+}
+
+/* Header */
+.header-container {
+  flex-shrink: 0;
+}
+
+/* Page Content */
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f9fafb;
+  padding: 1rem;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1023px) {
+  .dashboard-layout {
+    position: relative;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+  
+  .sidebar-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 50;
+  }
+  
+  .main-content {
+    width: 100%;
+    min-height: 100vh; /* Ensure full height */
+  }
+}
+
+@media (max-width: 768px) {
+  .page-content {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-content {
+    padding: 0.5rem;
+  }
+}
+
+/* RTL specific adjustments */
+.rtl-layout {
+  direction: rtl;
+}
+
+.rtl-layout .main-content {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+/* Ensure proper spacing in RTL */
+.rtl-layout .page-content {
+  text-align: right;
+}
+
+/* Custom scrollbar for main content */
+.page-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.page-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.page-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.page-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Smooth transitions */
+.dashboard-layout,
+.main-content,
+.page-content {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

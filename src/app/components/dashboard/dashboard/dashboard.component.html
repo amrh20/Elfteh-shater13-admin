@@ -1,0 +1,90 @@
+<div class="p-6">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex items-center justify-center h-64">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading" class="space-y-6">
+    <!-- User Info Section -->
+    <div *ngIf="currentUser" class="user-info-card bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-md p-6 text-white">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold mb-2">مرحباً، {{ currentUser.username }}!</h2>
+          <p class="text-blue-100">{{ currentUser.email }}</p>
+          <span class="inline-block mt-2 px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm">
+            {{ currentUser.role === 'super-admin' ? 'مدير عام' : 'مدير' }}
+          </span>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-blue-100">معرف المستخدم</p>
+          <p class="user-id text-xs">{{ currentUser.id }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total Products -->
+      <div class="stats-card products-card bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="icon-container p-3 bg-blue-100 rounded-lg ml-4">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+          </div>
+          <div class="flex-1 text-right">
+            <p class="stat-label text-sm font-medium text-gray-600 mb-1">إجمالي المنتجات</p>
+            <p class="stat-number arabic-number text-3xl font-bold text-gray-900">{{ stats.totalProducts }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Categories -->
+      <div class="stats-card categories-card bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="icon-container p-3 bg-green-100 rounded-lg ml-4">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2z"></path>
+            </svg>
+          </div>
+          <div class="flex-1 text-right">
+            <p class="stat-label text-sm font-medium text-gray-600 mb-1">إجمالي الأصناف</p>
+            <p class="stat-number arabic-number text-3xl font-bold text-gray-900">{{ stats.totalCategories }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Orders -->
+      <div class="stats-card orders-card bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="icon-container p-3 bg-purple-100 rounded-lg ml-4">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+            </svg>
+          </div>
+          <div class="flex-1 text-right">
+            <p class="stat-label text-sm font-medium text-gray-600 mb-1">إجمالي الطلبات</p>
+            <p class="stat-number arabic-number text-3xl font-bold text-gray-900">{{ stats.totalOrders }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Revenue -->
+      <div class="stats-card revenue-card bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="icon-container p-3 bg-yellow-100 rounded-lg ml-4">
+            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+            </svg>
+          </div>
+          <div class="flex-1 text-right">
+            <p class="stat-label text-sm font-medium text-gray-600 mb-1">إجمالي الإيرادات</p>
+            <p class="stat-number arabic-number text-3xl font-bold text-gray-900">{{ formatCurrency(stats.totalRevenue) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

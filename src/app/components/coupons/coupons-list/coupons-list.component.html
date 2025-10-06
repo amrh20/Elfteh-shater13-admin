@@ -1,0 +1,238 @@
+<div class="w-full max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+<!-- Page Header -->
+<div class="w-full bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">إدارة الكوبونات</h1>
+        <p class="text-gray-600 mt-1">إدارة أكواد الخصم والعروض الترويجية</p>
+      </div>
+      <button
+        (click)="navigateToAdd()"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>إضافة كوبون جديد</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistics Row -->
+  <div *ngIf="apiResponse" class="px-6 py-4 bg-gray-50">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-blue-600">{{ apiResponse.total || 0 }}</div>
+        <div class="text-sm text-gray-600">إجمالي الكوبونات</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600">{{ getActiveCouponsCount() }}</div>
+        <div class="text-sm text-gray-600">الكوبونات النشطة</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-red-600">{{ getExpiredCouponsCount() }}</div>
+        <div class="text-sm text-gray-600">الكوبونات المنتهية الصلاحية</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-purple-600">{{ getTotalUsageCount() }}</div>
+        <div class="text-sm text-gray-600">مجموع الاستخدامات</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="isLoading" class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+  <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+  <p class="text-gray-600">جاري تحميل الكوبونات...</p>
+</div>
+
+<!-- Error State -->
+<div *ngIf="!isLoading && error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+  <div class="flex">
+    <svg class="w-5 h-5 text-red-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <div class="mr-3">
+      <p class="text-red-800 font-medium">خطأ في تحميل البيانات</p>
+      <p class="text-red-700 text-sm">{{ error }}</p>
+      <button 
+        (click)="loadCoupons()" 
+        class="mt-2 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors">
+        إعادة المحاولة
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Coupons Table -->
+<div *ngIf="!isLoading && !error" class="w-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+  <div class="coupons-table-container overflow-x-auto">
+    <table class="w-full table-auto divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            كود الكوبون
+          </th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            الخصم
+          </th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            تاريخ الانتهاء
+          </th>
+          <!-- <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            عدد الاستخدامات
+          </th> -->
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            الحالة
+          </th>
+          <th class="actions-column px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+            الإجراءات
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let coupon of coupons; trackBy: trackByCouponId" class="hover:bg-gray-50 transition-colors duration-200">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div>
+              <div class="text-sm font-medium text-gray-900">{{ coupon.code }}</div>
+              <div *ngIf="coupon.description" class="text-sm text-gray-500 max-w-xs truncate" [title]="coupon.description">
+                {{ coupon.description }}
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-medium text-gray-900">{{ formatDiscount(coupon) }}</div>
+            <div class="text-xs text-gray-500">{{ getDiscountTypeText(coupon.discountType, coupon.discount) }}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">{{ formatDate(coupon.expiresAt) }}</div>
+            <div *ngIf="isExpired(coupon.expiresAt)" class="text-xs text-red-600 font-medium">منتهي الصلاحية</div>
+            <div *ngIf="!isExpired(coupon.expiresAt)" class="text-xs text-green-600">ساري</div>
+          </td>
+          <!-- <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">
+              {{ coupon.usedCount || 0 }}
+              <span *ngIf="coupon.usageLimit" class="text-gray-500"> / {{ coupon.usageLimit }}</span>
+              <span *ngIf="!coupon.usageLimit" class="text-gray-500"> / ∞</span>
+            </div>
+            <div *ngIf="coupon.usageLimit" class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+              <div class="bg-blue-600 h-1.5 rounded-full" [style.width.%]="getUsagePercentage(coupon)"></div>
+            </div>
+          </td> -->
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span [class]="'px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ' + getStatusColor(coupon.isActive)">
+              {{ getStatusText(coupon.isActive) }}
+            </span>
+          </td>
+          <td class="actions-column px-3 py-4 whitespace-nowrap text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button
+                (click)="editCoupon(coupon)"
+                class="action-btn edit-btn"
+                [title]="'تعديل كوبون ' + coupon.code"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                <span class="hidden sm:inline">تعديل</span>
+              </button>
+              <button
+                (click)="confirmDelete(coupon)"
+                class="action-btn delete-btn"
+                [title]="'حذف كوبون ' + coupon.code"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                <span class="hidden sm:inline">حذف</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Empty State -->
+        <tr *ngIf="coupons.length === 0">
+          <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+            <div class="flex flex-col items-center">
+              <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+              </svg>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">لا توجد كوبونات</h3>
+              <p class="text-gray-500 mb-4 max-w-sm">لم يتم إنشاء أي كوبونات خصم بعد. ابدأ بإنشاء كوبون جديد.</p>
+              <button
+                (click)="navigateToAdd()"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                إضافة كوبون جديد
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Pagination -->
+<div *ngIf="apiResponse && coupons.length > 0" class="mt-6">
+  <app-pagination
+    [pagination]="getPaginationInfo()"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteDialog" 
+     class="fixed inset-0 bg-gray-500/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300">
+    <div class="p-6 text-center">
+      <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+        <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z">
+          </path>
+        </svg>
+      </div>
+      
+      <h3 class="text-xl font-bold text-gray-900 mb-4">تأكيد حذف الكوبون</h3>
+      
+      <div class="mb-6">
+        <p class="text-gray-600 leading-relaxed mb-2">
+          هل أنت متأكد من حذف الكوبون
+          <span class="font-bold text-red-600">"{{ couponToDelete?.code }}"</span>؟
+        </p>
+        <p class="text-sm text-gray-500">لا يمكن التراجع عن هذا الإجراء وسيتم حذف جميع البيانات المرتبطة بهذا الكوبون.</p>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button 
+          (click)="onDeleteCancel()"
+          class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 font-medium"
+          [disabled]="isDeleting">
+          إلغاء
+        </button>
+        <button 
+          (click)="onDeleteConfirm()" 
+          [disabled]="isDeleting"
+          class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <svg *ngIf="isDeleting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" 
+               xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" 
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+          </svg>
+          {{ isDeleting ? 'جاري الحذف...' : 'حذف الكوبون' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

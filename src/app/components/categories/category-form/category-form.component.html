@@ -1,0 +1,129 @@
+<div class="p-6">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">
+        {{ isEditMode ? 'تعديل الصنف' : 'إضافة صنف جديد' }}
+      </h1>
+      <p class="text-sm text-gray-600">أدخل بيانات الصنف</p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="mr-3">
+          <p class="text-sm text-red-800">{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 gap-6">
+        <!-- Name Arabic -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">اسم الصنف</label>
+          <input type="text" [(ngModel)]="category.nameAr" name="nameAr" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="اسم الصنف">
+        </div>
+
+        <!-- Description Arabic -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">وصف الصنف</label>
+          <textarea [(ngModel)]="category.descriptionAr" name="descriptionAr" rows="3"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="وصف الصنف"></textarea>
+        </div>
+
+        <!-- Image -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">صورة الصنف</label>
+
+          <!-- Image Preview -->
+          <div *ngIf="category.image" class="mb-3">
+            <img [src]="category.image" [alt]="category.nameAr || 'صورة الصنف'" (error)="onImageError($event)"
+              class="w-20 h-20 rounded-lg object-cover border border-gray-300 shadow-sm">
+          </div>
+
+          <!-- Image Input -->
+          <input type="text" [(ngModel)]="category.image" name="image"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="رابط الصورة">
+
+          <!-- Help Text -->
+          <p class="text-xs text-gray-500 mt-1">
+            أدخل رابط الصورة المراد عرضها للصنف
+          </p>
+        </div>
+
+        <!-- Status -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">الحالة</label>
+          <div class="flex items-center">
+            <input type="checkbox" [(ngModel)]="category.isActive" name="isActive" id="isActive"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+            <label for="isActive" class="mr-2 block text-sm text-gray-900">نشط</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Type -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium text-gray-900">نوع الصنف</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Main Category Option - Hide if type=sub -->
+          <div class="flex items-center" *ngIf="!isSubcategoryMode">
+            <input type="radio" [(ngModel)]="category.type" name="categoryType" value="main" id="mainCategory"
+              (change)="onTypeChange()" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+            <label for="mainCategory" class="mr-2 block text-sm text-gray-900">صنف رئيسي</label>
+          </div>
+
+          <!-- Sub Category Option - Hide if type=main -->
+          <div class="flex items-center" *ngIf="!isMainCategoryMode">
+            <input type="radio" [(ngModel)]="category.type" name="categoryType" value="sub" id="subCategory"
+              (change)="onTypeChange()" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+            <label for="subCategory" class="mr-2 block text-sm text-gray-900">صنف فرعي</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parent Category (shown when sub category is selected) -->
+      <div *ngIf="category.type === 'sub'" class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <h4 class="text-sm font-medium text-blue-800 mb-3">اختيار الصنف الرئيسي</h4>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">الصنف الرئيسي</label>
+          <select [(ngModel)]="category.parentId" name="parentId" required
+            [disabled]="isSubcategoryMode"
+            [class]="'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ' + (isSubcategoryMode ? 'border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed' : 'border-gray-300')">
+            <option value="">اختر الصنف الرئيسي</option>
+            <option *ngFor="let mainCategory of parentCategories" [value]="mainCategory.id">
+              {{ mainCategory.nameAr }}
+            </option>
+          </select>
+          <!-- Debug info -->
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-end space-x-4 gap-3">
+        <button type="button" (click)="cancel()"
+          class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+          إلغاء
+        </button>
+        <button style="margin-inline-start: 12px;" type="submit" [disabled]="isLoading || !isFormValid()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 
+          disabled:cursor-not-allowed btn-primary">
+          <span *ngIf="isLoading" class="inline-block animate-spin mr-2">⏳</span>
+          {{ isLoading ? 'جاري الحفظ...' : isEditMode ? 'تعديل الصنف' : 'حفظ الصنف' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
