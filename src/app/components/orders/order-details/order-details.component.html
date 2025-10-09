@@ -31,7 +31,7 @@
   <div *ngIf="!isLoading && order" class="space-y-6">
     <!-- Header -->
     <div class="" 
-    style="display: flex;justify-content: space-between ;gap: 3rem;width: 100%;">
+    style="display: flex;justify-content: space-between ;gap: 3rem;width: 100%;flex-wrap: wrap;">
       <div>
         <div class="flex items-center space-x-4">
           <button
@@ -50,7 +50,7 @@
           </div>
         </div>
       </div>
-      <div style="display: flex;justify-content: space-between;gap: 1rem;align-items: center;">
+      <div style="display: flex;justify-content: space-between;gap: 1rem;align-items: center;flex-wrap: wrap;">
         <button
           (click)="updateOrderStatus()"
           class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -250,9 +250,9 @@
               class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-700 text-base font-medium bg-gray-50 hover:bg-white cursor-pointer"
             >
               <option value="" disabled>-- اختر الحالة --</option>
-              <option value="pending">⏳ في الانتظار</option>
-              <option value="confirmed">✅ مؤكد</option>
-              <option value="processing">⚙️ قيد المعالجة</option>
+              <option value="pending">⏳ تم استلام الطلب</option>
+              <option value="confirmed">✅ تم تأكيد الطلب</option>
+              <option value="processing">⚙️ جاري التحضير</option>
               <option value="shipped">🚚 تم الشحن</option>
               <option value="delivered">📦 تم التوصيل</option>
               <option value="cancelled">❌ ملغي</option>
@@ -261,27 +261,27 @@
         </div>
 
         <!-- Footer -->
-        <div class="bg-gray-50 px-6 py-4 flex gap-3">
+        <div class="modal-footer">
           <button
             (click)="cancelStatusUpdate()"
-            class="flex-1 px-5 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 disabled:opacity-50"
+            class="cancel-btn"
             [disabled]="isLoading"
           >
             إلغاء
           </button>
           <button
             (click)="confirmStatusUpdate()"
-            class="flex-1 px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            class="confirm-btn"
             [disabled]="isLoading || !newOrderStatus"
           >
-            <span *ngIf="!isLoading" class="flex items-center justify-center">
-              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span *ngIf="!isLoading" class="btn-content">
+              <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
               تحديث الحالة
             </span>
-            <span *ngIf="isLoading" class="flex items-center justify-center">
-              <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
+            <span *ngIf="isLoading" class="btn-content">
+              <div class="loading-spinner"></div>
               جاري التحديث...
             </span>
           </button>
@@ -338,27 +338,27 @@
         </div>
 
         <!-- Footer -->
-        <div class="bg-gray-50 px-6 py-4 flex gap-3">
+        <div class="modal-footer">
           <button
             (click)="cancelPaymentUpdate()"
-            class="flex-1 px-5 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 disabled:opacity-50"
+            class="cancel-btn"
             [disabled]="isLoading"
           >
             إلغاء
           </button>
           <button
             (click)="confirmPaymentUpdate()"
-            class="flex-1 px-5 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-purple-800 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            class="confirm-btn payment-btn"
             [disabled]="isLoading || !newPaymentStatus"
           >
-            <span *ngIf="!isLoading" class="flex items-center justify-center">
-              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span *ngIf="!isLoading" class="btn-content">
+              <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
               تحديث الدفع
             </span>
-            <span *ngIf="isLoading" class="flex items-center justify-center">
-              <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
+            <span *ngIf="isLoading" class="btn-content">
+              <div class="loading-spinner"></div>
               جاري التحديث...
             </span>
           </button>
@@ -475,21 +475,23 @@
         </div>
         
         <!-- Footer -->
-        <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t">
+        <div class="modal-footer print-footer">
           <button
             (click)="closePrintModal()"
-            class="px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
+            class="cancel-btn"
           >
             إلغاء
           </button>
           <button
             (click)="printOrder()"
-            class="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center"
+            class="confirm-btn print-btn"
           >
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-            </svg>
-            طباعة الفاتورة
+            <span class="btn-content">
+              <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+              </svg>
+              طباعة الفاتورة
+            </span>
           </button>
         </div>
       </div>

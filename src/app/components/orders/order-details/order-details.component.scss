@@ -3,6 +3,121 @@
   // Add any custom styles here if needed
 }
 
+// Modal Footer Styles
+.modal-footer {
+  background-color: #f9fafb;
+  padding: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  
+  // Print Footer
+  &.print-footer {
+    justify-content: flex-end;
+    border-top: 1px solid #e5e7eb;
+    
+    .cancel-btn,
+    .confirm-btn {
+      flex: none;
+      min-width: 120px;
+    }
+  }
+}
+
+// Cancel Button
+.cancel-btn {
+  flex: 1;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.75rem;
+  color: #374151;
+  font-weight: 600;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Confirm Button
+.confirm-btn {
+  flex: 1;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(to right, #2563eb, #1d4ed8);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(to right, #1d4ed8, #1e40af);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  // Payment Button Variant
+  &.payment-btn {
+    background: linear-gradient(to right, #9333ea, #7c3aed);
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(to right, #7c3aed, #6d28d9);
+    }
+  }
+  
+  // Print Button Variant
+  &.print-btn {
+    background: linear-gradient(to right, #059669, #047857);
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(to right, #047857, #065f46);
+    }
+  }
+}
+
+// Button Content
+.btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Button Icon
+.btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: 0.5rem;
+}
+
+// Loading Spinner
+.loading-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 // Print styles
 @media print {
   .no-print {
@@ -13,6 +128,7 @@
     display: block !important;
   }
 } 
+
 .bg-blue-600  {
   background-color: #007bff !important;
 }

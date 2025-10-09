@@ -370,8 +370,8 @@
   </div>
 
   <!-- Order Status Update Modal -->
-  <div *ngIf="showStatusModal" class="modal-overlay">
-    <div class="modal-container">
+  <div *ngIf="showStatusModal" class="modal-overlay-centered">
+    <div class="modal-container-centered">
       <div class="modal-content">
         <h3 class="modal-title">تحديث حالة الطلب</h3>
         <div class="modal-body">
@@ -384,9 +384,9 @@
               [(ngModel)]="newOrderStatus"
               class="form-select"
             >
-              <option value="pending">في الانتظار</option>
-              <option value="confirmed">مؤكد</option>
-              <option value="processing">قيد المعالجة</option>
+              <option value="pending">تم استلام الطلب</option>
+              <option value="confirmed">تم تأكيد الطلب</option>
+              <option value="processing">جاري التحضير</option>
               <option value="shipped">تم الشحن</option>
               <option value="delivered">تم التوصيل</option>
               <option value="cancelled">ملغي</option>
