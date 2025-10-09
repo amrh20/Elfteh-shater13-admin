@@ -1,0 +1,33 @@
+// Login Component Responsive Styles
+
+// Prevent iOS auto-zoom on mobile
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]) {
+    font-size: 16px !important;
+  }
+
+  // Touch targets for buttons
+  button {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  // Adjust form spacing
+  .form-container {
+    padding: 1.5rem;
+  }
+}
+
+// Improve loading states
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

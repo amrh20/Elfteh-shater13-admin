@@ -7,3 +7,25 @@
         border-color: #004085;
     }
 }
+
+// Responsive form inputs - prevent iOS auto-zoom
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  // Improve modal responsiveness
+  .modal-content {
+    max-width: calc(100vw - 2rem);
+    margin: 1rem;
+  }
+
+  // Touch targets
+  button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+  }
+}

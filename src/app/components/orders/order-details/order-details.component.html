@@ -30,8 +30,7 @@
   <!-- Order Details -->
   <div *ngIf="!isLoading && order" class="space-y-6">
     <!-- Header -->
-    <div class="" 
-    style="display: flex;justify-content: space-between ;gap: 3rem;width: 100%;flex-wrap: wrap;">
+    <div class="order-header-container">
       <div>
         <div class="flex items-center space-x-4">
           <button
@@ -50,7 +49,7 @@
           </div>
         </div>
       </div>
-      <div style="display: flex;justify-content: space-between;gap: 1rem;align-items: center;flex-wrap: wrap;">
+      <div class="order-actions-container">
         <button
           (click)="updateOrderStatus()"
           class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

@@ -3,6 +3,37 @@
   // Add any custom styles here if needed
 }
 
+// Header container
+.order-header-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+  width: 100%;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    gap: 1.5rem;
+  }
+}
+
+// Actions container
+.order-actions-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
 // Modal Footer Styles
 .modal-footer {
   background-color: #f9fafb;

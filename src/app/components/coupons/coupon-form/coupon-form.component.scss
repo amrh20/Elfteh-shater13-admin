@@ -167,14 +167,24 @@ button[type="button"] {
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .form-actions {
     flex-direction: column;
-    
+
     .btn {
       width: 100%;
       margin-bottom: 0.5rem;
     }
+  }
+}
+
+// Prevent iOS auto-zoom
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  input[type="datetime-local"] {
+    font-size: 16px !important;
   }
 }
 

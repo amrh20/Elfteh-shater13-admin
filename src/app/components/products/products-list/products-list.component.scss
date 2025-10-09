@@ -32,13 +32,13 @@
 }
 // Fix for blue button colors
 .bg-blue-600 {
-    background-color: #2563eb !important;
-    color: #ffffff !important;
-    border-color: #2563eb !important;
-    
+    background-color: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+
     &:hover {
-        background-color: #1d4ed8 !important;
-        border-color: #1d4ed8 !important;
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
     }
 }
 
@@ -59,11 +59,11 @@
 
 // Filter actions container
 .filter-actions-container {
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     gap: 0.75rem;
     margin-top: 1.5rem;
-    
+
     @media (min-width: 640px) {
         flex-direction: row;
         align-items: center;
@@ -82,11 +82,11 @@
 
 // Green button fix
 .bg-green-600 {
-    background-color: #059669 !important;
-    color: #ffffff !important;
-    
+    background-color: #059669;
+    color: #ffffff;
+
     &:hover {
-        background-color: #047857 !important;
+        background-color: #047857;
     }
 }
 
@@ -152,49 +152,64 @@
     border-color: #047857;
 }
 
-// Fix for badge positioning
-.relative {
-    position: relative !important;
-}
-
-.absolute {
-    position: absolute !important;
-}
-
-// Force 3 products per row - Custom CSS override
+// Products grid - responsive without !important
 .products-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 1.5rem !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
 
-// Responsive adjustments for products grid
-@media (max-width: 1023px) {
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 1rem !important;
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 1023px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    @media (max-width: 639px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
 }
 
-@media (max-width: 639px) {
-    .products-grid {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
+// Product card image container
+.product-image-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9fafb;
+    padding: 1rem;
+
+    img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        object-fit: cover;
+        aspect-ratio: 1 / 1;
+
+        @media (max-width: 640px) {
+            max-width: 180px;
+        }
     }
 }
-.left-2 {
-    left: 2px;
+// Input fields - prevent iOS auto-zoom
+input[type="text"],
+select {
+    @media (max-width: 640px) {
+        font-size: 16px;
+    }
 }
-.right-2 {
-    right: 2px;
-}
-.top-2 {
-    top: 2px;
-}
-.bottom-2 {
-    bottom: 2px;
+
+// Badges positioning helpers
+.badges-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }

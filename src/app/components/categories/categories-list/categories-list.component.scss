@@ -110,7 +110,7 @@
 }
 
 .subcategories-container.expanded {
-  max-height: 2000px;
+  max-height: none; // Remove fixed height
   opacity: 1;
 }
 
@@ -303,15 +303,20 @@
   font-size: 1rem;
   line-height: 1.5;
   transition: all 0.2s ease;
-  
+
   &::placeholder {
     color: #6b7280;
   }
-  
+
   &:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (max-width: 640px) {
+    font-size: 16px; // Prevent iOS auto-zoom
+    padding: 0.625rem 2rem 0.625rem 0.75rem;
   }
 }
 
@@ -642,17 +647,28 @@ html {
   .subcategory-name {
     font-size: 0.875rem; /* 14px */
   }
-  
+
   .subcategory-description {
     font-size: 0.75rem; /* 12px */
   }
-  
+
   .subcategory-stats-section {
     gap: 0.75rem;
   }
-  
+
   .subcategory-stat-text {
     font-size: 0.75rem; /* 12px */
+  }
+
+  // Improve touch targets
+  .action-btn,
+  .subcategory-action-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .subcategory-item {
+    padding: 0.75rem;
   }
 }
 
