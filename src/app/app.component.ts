@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
@@ -15,7 +15,7 @@ import { HeaderComponent } from './components/shared/header/header.component';
 export class AppComponent implements OnInit {
   title = 'admin-dashboard';
   
-  constructor(private authService: AuthService) {}
+  private authService = inject(AuthService);
   
   ngOnInit(): void {
     // Listen for mobile menu toggle events with debouncing

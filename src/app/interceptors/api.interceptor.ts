@@ -2,15 +2,11 @@ import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpEvent, HttpErrorResp
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 
 export const ApiInterceptor: HttpInterceptorFn = (
   request: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
-  const router = inject(Router);
-  
   // Clone the request and add the base URL if it's a relative URL
   let apiReq = request;
   
@@ -48,9 +44,9 @@ export const ApiInterceptor: HttpInterceptorFn = (
 
         if (!isAuthEndpoint) {
           localStorage.removeItem('authToken');
-          // Use SPA navigation to avoid full page reload
-          if (router.url !== '/login') {
-            router.navigateByUrl('/login');
+          // Use window.location for navigation to avoid dependency injection issues
+          if (window.location.pathname !== '/login') {
+            window.location.href = '/login';
           }
         }
       }

@@ -1,29 +1,24 @@
 import { Routes } from '@angular/router';
-import { AuthService } from './services/auth.service';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 
-// Auth Guard
+// Simple Auth Guard
 const authGuard = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-  
   try {
-    const isAuth = authService.isAuthenticated();
-    const currentUser = authService.getCurrentUser();
+    // Simple localStorage check without dependency injection
+    const hasToken = !!localStorage.getItem('authToken');
+    const hasUser = !!localStorage.getItem('adminUser');
     
-    console.log('Auth Guard Check:', { isAuth, currentUser });
+    console.log('Auth Guard Check:', { hasToken, hasUser });
     
-    if (isAuth && currentUser) {
+    if (hasToken && hasUser) {
       return true;
     } else {
       console.log('Redirecting to login');
-      router.navigate(['/login']);
+      window.location.href = '/login';
       return false;
     }
   } catch (error) {
     console.error('Auth guard error:', error);
-    router.navigate(['/login']);
+    window.location.href = '/login';
     return false;
   }
 };
