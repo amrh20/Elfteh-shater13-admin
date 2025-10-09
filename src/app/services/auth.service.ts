@@ -42,11 +42,18 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private apiService: ApiService) {
-    // Check if user is logged in from localStorage
-    const savedUser = localStorage.getItem('adminUser');
-    const savedToken = localStorage.getItem('authToken');
-    if (savedUser && savedToken) {
-      this.currentUserSubject.next(JSON.parse(savedUser));
+    try {
+      // Check if user is logged in from localStorage
+      const savedUser = localStorage.getItem('adminUser');
+      const savedToken = localStorage.getItem('authToken');
+      if (savedUser && savedToken) {
+        this.currentUserSubject.next(JSON.parse(savedUser));
+      }
+    } catch (error) {
+      console.error('Error initializing AuthService:', error);
+      // Clear corrupted data
+      localStorage.removeItem('adminUser');
+      localStorage.removeItem('authToken');
     }
   }
 
@@ -85,25 +92,35 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    // Check both localStorage and currentUserSubject
-    const hasToken = !!localStorage.getItem('authToken');
-    const hasUser = !!localStorage.getItem('adminUser');
-    const currentUser = this.currentUserSubject.value;
-    
-    const isAuth = hasToken && hasUser && currentUser !== null;
-    
-    console.log('isAuthenticated check:', {
-      hasToken,
-      hasUser,
-      currentUser: !!currentUser,
-      isAuth
-    });
-    
-    return isAuth;
+    try {
+      // Check both localStorage and currentUserSubject
+      const hasToken = !!localStorage.getItem('authToken');
+      const hasUser = !!localStorage.getItem('adminUser');
+      const currentUser = this.currentUserSubject.value;
+      
+      const isAuth = hasToken && hasUser && currentUser !== null;
+      
+      console.log('isAuthenticated check:', {
+        hasToken,
+        hasUser,
+        currentUser: !!currentUser,
+        isAuth
+      });
+      
+      return isAuth;
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      return false;
+    }
   }
 
   getCurrentUser(): AdminUser | null {
-    return this.currentUserSubject.value;
+    try {
+      return this.currentUserSubject.value;
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      return null;
+    }
   }
 
   setCurrentUser(user: AdminUser): void {
